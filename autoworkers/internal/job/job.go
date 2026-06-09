@@ -7,22 +7,18 @@ const (
 	Pending JobStatus=iota
 	Running
 	Completed
-	failed
+	Failed
 )
 
 type Job struct{
 	ID string
-	Tyype string 
+	Type string 
 	Payload string
-	Status string
+	Status JobStatus
 	Result string
 	Error string
 	Created_time int
 	Started_time int
 	Finished_time int 
-
-}
-
-func main (){
 
 }

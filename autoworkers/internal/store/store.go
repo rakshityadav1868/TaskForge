@@ -25,28 +25,32 @@ func Create(x *job.Job, p *Store){
 	p.jobmapping[x.ID] = x
 }
 
-func Get(x *job.Job,p *Store) {
+func Get(x *job.Job,p *Store) *job.Job {
 	p.mu.RLock()
-	defer p.mu.Unlock()
+	defer p.mu.RUnlock()
 	_,ok := p.jobmapping[x.ID]
+	y := p.jobmapping[x.ID]
 
 	if (ok){
-
 		fmt.Println("Job found")
+		return y
+		
 	}else{
 		fmt.Println("Job not found")
+		return nil
 	}
 
 }
 
 func UpdateStatus(x *job.Job,p *Store){
+	p.mu.Lock()
+	defer p.mu.Unlock()
 	jobFound,ok :=p.jobmapping[x.ID]
 	if ok{
-		p.mu.Lock()
 		jobFound.Status=x.Status
 		jobFound.Created_time=x.Created_time
 		jobFound.Finished_time=x.Finished_time
-		p.mu.Unlock()
+
 
 	}else{
 		fmt.Println("job not found")
