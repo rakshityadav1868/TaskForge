@@ -25,11 +25,11 @@ func Create(x *job.Job, p *Store){
 	p.jobmapping[x.ID] = x
 }
 
-func Get(x *job.Job,p *Store) *job.Job {
+func Get(p *Store, jobId string) *job.Job {
 	p.mu.RLock()
 	defer p.mu.RUnlock()
-	_,ok := p.jobmapping[x.ID]
-	y := p.jobmapping[x.ID]
+	_,ok := p.jobmapping[jobId]
+	y := p.jobmapping[jobId]
 
 	if (ok){
 		fmt.Println("Job found")
