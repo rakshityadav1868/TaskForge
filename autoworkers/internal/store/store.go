@@ -32,7 +32,6 @@ func Get(p *Store, jobId string) *job.Job {
 	y := p.jobmapping[jobId]
 
 	if (ok){
-		fmt.Println("Job found")
 		return y
 		
 	}else{
