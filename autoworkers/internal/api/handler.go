@@ -12,8 +12,9 @@ import (
 func (a *ApiServer) SubmitJob(w http.ResponseWriter, r *http.Request){
 	fmt.Println(a.apistore)
 	fmt.Println(a.apiqueue)
+	a.count++
 	testjob := &job.Job{
-		ID: "job-1",
+		ID: fmt.Sprintf("job-%d",a.count),
 		Type: "test",
 		Payload: "hello world",
 		Status: job.Pending,

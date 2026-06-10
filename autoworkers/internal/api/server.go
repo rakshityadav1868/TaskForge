@@ -9,12 +9,14 @@ import (
 type ApiServer struct{
 	apistore *store.Store
 	apiqueue *queue.Queue
+	count int
 }
 
 func Constructor(q *queue.Queue, s *store.Store) *ApiServer{
 p := &ApiServer{
 	apistore: s,
 	apiqueue: q,
+	count: 0,
 }
 return p
 }
