@@ -5,12 +5,16 @@ import (
 	"autoworkers/internal/queue"
 	"autoworkers/internal/store"
 	"autoworkers/internal/worker"
+	"fmt"
+	"autoworkers/internal/database"
 )
 
 func main(){
 	s := store.Constructor()
 	q := queue.Constructor()
 	w :=worker.Constructor(q, s)
+	d := database.Constructor()
+	fmt.Println(d)
 	server := api.Constructor(q,s)
 	go worker.Workers(w)
 	server.Start()

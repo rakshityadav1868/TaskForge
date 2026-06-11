@@ -3,6 +3,8 @@ package database
 import (
 	"database/sql"
 	"fmt"
+
+	_ "modernc.org/sqlite"
 )
 
 type Database struct {
@@ -12,6 +14,7 @@ type Database struct {
 
 func Constructor() *Database{
 	db, err := sql.Open("sqlite", "./taskforge.db")
+	fmt.Println("after open", err)
 	if err != nil {
 		fmt.Println(err)
 	}
