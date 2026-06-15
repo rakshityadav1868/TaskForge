@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"autoworkers/internal/job"
+
 	_ "modernc.org/sqlite"
 )
 
@@ -15,7 +17,7 @@ type Database struct {
 func Constructor() *Database{
 	db, err := sql.Open("sqlite", "./taskforge.db")
 	query := `
-	CREATE TABLE Jobs(
+	CREATE TABLE IF NOT EXISTS Jobs(
 	id TEXT,
 	type TEXT,
 	payload TEXT,
@@ -37,4 +39,17 @@ func Constructor() *Database{
 	return &Database{
 	DB: db,
 	}
+}
+
+func (d *Database) SaveJob(j *job.Job){
+query := `
+INSERT INTO JOBS(ID,TYPE,PAYLOAD,STATUS,RESULT)
+VALUES(?,?,?,?,?)
+`
+res,err := d.DB.Exec(query,j.ID,j.Type,j.Payload,j.Status,j.Result)
+if err!=nil{
+fmt.Println(err)
+}else{
+	fmt.Println(res)
+}
 }

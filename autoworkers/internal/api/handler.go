@@ -16,7 +16,7 @@ type SubmitJobRequest struct{
 type SubmitJobResponse struct{
 	ID string `json:"id"`
 	Status job.JobStatus `json:"status"`
-	Result string
+	Result string `json:"result"`
 }
 
 func (a *ApiServer) SubmitJob(w http.ResponseWriter, r *http.Request){
@@ -34,6 +34,7 @@ func (a *ApiServer) SubmitJob(w http.ResponseWriter, r *http.Request){
 			Status: job.Pending,
 		}
 		store.Create(testjob,a.apistore)
+		a.apidatabase.SaveJob(testjob)
 		response := &SubmitJobResponse{
 			ID : testjob.ID,
 			Status : testjob.Status,

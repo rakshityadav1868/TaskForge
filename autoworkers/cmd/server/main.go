@@ -15,7 +15,7 @@ func main(){
 	w :=worker.Constructor(q, s)
 	d := database.Constructor()
 	fmt.Println(d)
-	server := api.Constructor(q,s)
+	server := api.Constructor(q,s,d)
 	go worker.Workers(w)
 	server.Start()
 
