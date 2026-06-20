@@ -25,8 +25,10 @@ func (a *ApiServer) SubmitJob(w http.ResponseWriter, r *http.Request){
 		fmt.Fprint(w,"Route method is incorrect")
 	}else{
 		var b SubmitJobRequest
-		x := json.NewDecoder(r.Body).Decode(&b)
-		fmt.Println(x)
+		err := json.NewDecoder(r.Body).Decode(&b)
+		if err!=nil{
+			fmt.Println(err)
+		}
 		a.count++
 		testjob := &job.Job{
 			ID: fmt.Sprintf("job-%d",a.count),

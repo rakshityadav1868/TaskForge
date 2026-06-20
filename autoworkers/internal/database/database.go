@@ -80,11 +80,9 @@ func (d *Database) UpdateJob(j *job.Job){
 UPDATE Jobs
 SET status = ?, result = ?, error = ?, retry_count=?
 WHERE id = ?`
-res,err := d.DB.Exec(query,j.Status,j.Result,j.Error,j.RetryCount,j.ID)
+_,err := d.DB.Exec(query,j.Status,j.Result,j.Error,j.RetryCount,j.ID)
 if err!=nil{
 	fmt.Println(err)
-}else{
-	fmt.Println(res)
 }
 
 

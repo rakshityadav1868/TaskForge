@@ -15,13 +15,10 @@ func Constructor() *Redis{
 	r := goredis.NewClient(&goredis.Options{Addr: "localhost:6379",
 										Password: "",
 										DB: 0})
-	b,err := r.Ping(ctx).Result()
+	_,err := r.Ping(ctx).Result()
 	if err!=nil{
 		fmt.Println(err)
 
-	}else{
-
-		fmt.Println(b)
 	}
 	st := &Redis{
 		Client: r,
