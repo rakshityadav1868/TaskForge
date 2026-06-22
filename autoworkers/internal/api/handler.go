@@ -11,6 +11,7 @@ import (
 type SubmitJobRequest struct{
 	Type string `json:"type"`
 	Payload string `json:"payload"`
+	Delay string `json:"delay"`
 }
 type SubmitJobResponse struct{
 	ID string `json:"id"`

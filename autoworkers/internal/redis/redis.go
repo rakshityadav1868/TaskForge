@@ -51,3 +51,18 @@ func (r *Redis) Dequeue() string{
 	}
 	return ""
 }
+func (r* Redis) EnqueueDelay(jobID string,executeAt int64,){
+	ctx := context.Background()
+	x := r.Client.ZAdd(
+		ctx,
+		"delayed_jobs",
+		goredis.Z{
+			Score: float64(executeAt),
+			Member: jobID,
+		},
+	)
+	if x.Err()!=nil{
+		fmt.Println(x.Err())
+	}
+
+}

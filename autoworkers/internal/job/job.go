@@ -22,5 +22,6 @@ type Job struct{
 	Finished_time int 
 	RetryCount int
 	MaxRetries int
+	Delay int
 
 }
