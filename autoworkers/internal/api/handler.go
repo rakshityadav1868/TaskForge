@@ -17,6 +17,12 @@ type SubmitJobResponse struct{
 	Status job.JobStatus `json:"status"`
 	Result string `json:"result"`
 }
+type MetricsResponse struct {
+    Pending     int `json:"pending"`
+    Running     int `json:"running"`
+    Completed   int `json:"completed"`
+    Failed      int `json:"failed"`
+}
 
 func (a *ApiServer) SubmitJob(w http.ResponseWriter, r *http.Request){
 
@@ -40,6 +46,7 @@ func (a *ApiServer) SubmitJob(w http.ResponseWriter, r *http.Request){
 		}
 		store.Create(testjob,a.apistore)
 		a.apidatabase.SaveJob(testjob)
+		a.apimetrices.Pending++
 		response := &SubmitJobResponse{
 			ID : testjob.ID,
 			Status : testjob.Status,
@@ -65,4 +72,13 @@ func  (a *ApiServer) GetJob(w http.ResponseWriter, r *http.Request){
 func (a *ApiServer) GetAllJobs(w http.ResponseWriter, r *http.Request){
 	x := a.apidatabase.GetAllJobs()
 	json.NewEncoder(w).Encode(x)
+}
+func (a *ApiServer) GetMetrics(w http.ResponseWriter, r *http.Request){
+	response := MetricsResponse{
+		Pending: a.apimetrices.Pending,
+		Running: a.apimetrices.Running,
+		Completed: a.apimetrices.Completed,
+		Failed: a.apimetrices.Failed,
+	}
+	json.NewEncoder(w).Encode(response)
 }
