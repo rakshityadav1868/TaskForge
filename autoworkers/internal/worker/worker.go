@@ -59,7 +59,9 @@ func Workers(m *Worker){
 				}else{
 					// permanent failure log
 					fmt.Printf( "Job %s permanently failed\n",jobobj.ID)
+					oldstatus := jobobj.Status
 					jobobj.Status = job.Failed
+					m.metrics.Update(oldstatus,jobobj.Status)
 					Error := err.Error()
 					jobobj.Error = Error
 					store.UpdateStatus(jobobj,m.store)
@@ -69,7 +71,9 @@ func Workers(m *Worker){
 			}else{
 				jobobj.Error = ""
 				jobobj.Result = result
+				oldstatus := jobobj.Status
 				jobobj.Status = job.Completed
+				m.metrics.Update(oldstatus,jobobj.Status)
 				store.UpdateStatus(jobobj,m.store)
 				m.database.UpdateJob(jobobj)
 			}
