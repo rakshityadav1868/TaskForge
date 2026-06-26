@@ -51,3 +51,15 @@ func (r *Redis) Dequeue() string{
 	}
 	return ""
 }
+
+func (r *Redis) GetQueueLength() int{
+	ctx := context.Background()
+	x:= r.Client.LLen(ctx,"jobs")
+	res, err := x.Result()
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+	intres := int(res)
+	return intres
+}
