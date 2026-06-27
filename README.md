@@ -103,26 +103,6 @@ TaskForge implements a classic **Producer-Consumer pattern** backed by key-value
 ```
 
 ---
-
-## Architecture & Component Interaction Diagram
-
-The diagram below details the sequence of events and how every component integrates with the others:
-
-```mermaid
-graph TD
-    Client["Client / Caller"] -->|1. Submit HTTP Request| API["API Server (internal/api)"]
-    
-    API -->|2. Enqueue Job ID| Queue["Redis Queue (internal/redis)"]
-    Queue -->|3. Dequeue Job ID| Worker["Worker Pool (internal/worker)"]
-    Worker -->|4. Execute Task| Executor["Executor (internal/executor)"]
-    Worker -.->|Update Status| State["State Stores (SQLite DB / In-Memory Store)"]
-    Executor -->|5. Generate Call| LLM["LLM Client (internal/llm)"]
-    
-    API -.->|Save / Get Details| State
-```
-
----
-
 ## Core Components Analysis
 
 ### 1. API Server (`internal/api`)
