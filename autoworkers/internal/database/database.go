@@ -15,7 +15,7 @@ type Database struct {
 }
 
 func Constructor() *Database{
-	db, err := sql.Open("sqlite", "./taskforge.db")
+	db, err := sql.Open("sqlite", "./workers.db")
 	query := `
 	CREATE TABLE IF NOT EXISTS Jobs(
 	id TEXT PRIMARY KEY,

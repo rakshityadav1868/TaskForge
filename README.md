@@ -1,6 +1,6 @@
-# TaskForge
+# Auto-Scaling Workers
 
-TaskForge is a Go-based asynchronous job processing engine that uses Redis-backed queues, autoscaling worker pools, SQLite persistence, and pluggable LLM execution. It enables long-running tasks to execute in the background while HTTP APIs remain responsive.
+Auto-Scaling Workers is a Go-based asynchronous job processing engine that uses Redis-backed queues, autoscaling worker pools, SQLite persistence, and pluggable LLM execution. It enables long-running tasks to execute in the background while HTTP APIs remain responsive.
 
 ---
 
@@ -38,7 +38,7 @@ stateDiagram-v2
 1. **API Server**: Ingests jobs via `POST /jobs` and returns an immediate response with a job ID in milliseconds.
 2. **Redis Queue**: Acts as the message broker holding pending job IDs.
 3. **Autoscaling Manager**: Monitors queue depth and dynamically scales workers: `Ceil(QueueLength / 5)` (Min: 1, Max: 15).
-4. **Workers**: Dequeue job IDs via blocking pop, fetch metadata from in-memory cache, trigger execution (like OpenRouter API calls), and persist states in SQLite (`taskforge.db`).
+4. **Workers**: Dequeue job IDs via blocking pop, fetch metadata from in-memory cache, trigger execution (like OpenRouter API calls), and persist states in SQLite (`workers.db`).
 
 ---
 
@@ -48,7 +48,7 @@ stateDiagram-v2
 - **Go**: Version `1.22+`
 - **Redis**: Running locally on port `6379`
   ```bash
-  docker run --name taskforge-redis -p 6379:6379 -d redis
+  docker run --name workers-redis -p 6379:6379 -d redis
   ```
 
 ### 2. Run Go Backend
@@ -89,7 +89,7 @@ done
 ```bash
 curl -X POST http://localhost:8080/jobs \
   -H "Content-Type: application/json" \
-  -d '{"type": "llm", "model": "openai/gpt-4o-mini", "prompt": "Say hello from TaskForge"}'
+  -d '{"type": "llm", "model": "openai/gpt-4o-mini", "prompt": "Say hello from auto-scaling workers"}'
 ```
 
 ### 3. Submit Failing Task (Triggers 3x Retries)
