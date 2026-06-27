@@ -22,5 +22,7 @@ type Job struct{
 	Finished_time int 
 	RetryCount int
 	MaxRetries int
+	Model string
+	Prompt string
 
 }

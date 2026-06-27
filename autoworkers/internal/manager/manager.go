@@ -2,6 +2,7 @@ package manager
 
 import (
 	"autoworkers/internal/database"
+	"autoworkers/internal/executor"
 	"autoworkers/internal/metrics"
 	"autoworkers/internal/redis"
 	"autoworkers/internal/store"
@@ -20,9 +21,10 @@ type Manager struct{
 	workercount int
 	workers map[int]*worker.Worker
 	cancels map[int]context.CancelFunc
+	executor *executor.Executor
 }
 
-func Constructor(redisqueue *redis.Redis,store *store.Store, database *database.Database, metrics *metrics.Metrics) *Manager{
+func Constructor(redisqueue *redis.Redis,store *store.Store, database *database.Database, metrics *metrics.Metrics, exe *executor.Executor) *Manager{
 return &Manager{
 	redisqueue: redisqueue,
 	store: store,
@@ -30,6 +32,7 @@ return &Manager{
 	metrics: metrics,
 	workers: make(map[int]*worker.Worker),
 	cancels: make(map[int]context.CancelFunc),
+	executor: exe,
 
 }
 }
@@ -37,7 +40,7 @@ return &Manager{
 func (m *Manager) StartWorker(){
 	m.workercount  ++
 	ctx, cancel := context.WithCancel(context.Background())
-	w1 := worker.Constructor(m.workercount,m.redisqueue,m.store,m.database,m.metrics,ctx)
+	w1 := worker.Constructor(m.workercount,m.redisqueue,m.store,m.database,m.metrics,ctx,m.executor)
 	m.workers[m.workercount] = w1
 	m.cancels[m.workercount]=cancel
 	go worker.Workers(w1)

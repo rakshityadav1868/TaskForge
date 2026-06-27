@@ -17,8 +17,9 @@ type Worker struct{
 	database *database.Database
 	metrics *metrics.Metrics
 	ctx context.Context
+	executor *executor.Executor
 }
-func Constructor(id int ,redisqueue *redis.Redis,store *store.Store, database *database.Database, metrics *metrics.Metrics, context context.Context) *Worker{
+func Constructor(id int ,redisqueue *redis.Redis,store *store.Store, database *database.Database, metrics *metrics.Metrics, context context.Context, executor *executor.Executor) *Worker{
 	s := &Worker{
 		id: id,
 		redisqueue: redisqueue,
@@ -26,6 +27,7 @@ func Constructor(id int ,redisqueue *redis.Redis,store *store.Store, database *d
 		database: database,
 		metrics: metrics,
 		ctx: context,
+		executor: executor,
 	}
 	return s
 
@@ -55,7 +57,7 @@ func Workers(m *Worker){
 			
 			store.UpdateStatus(jobobj,m.store)
 			m.database.UpdateJob(jobobj)
-			result ,err := executor.Execute(jobobj)
+			result ,err := m.executor.Execute(jobobj)
 			if err!=nil{
 				jobobj.RetryCount ++
 				if jobobj.RetryCount<jobobj.MaxRetries{

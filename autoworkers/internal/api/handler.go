@@ -11,6 +11,8 @@ import (
 type SubmitJobRequest struct{
 	Type string `json:"type"`
 	Payload string `json:"payload"`
+	Model string `json:"model"`
+	Prompt string `json:"prompt"`
 }
 type SubmitJobResponse struct{
 	ID string `json:"id"`
@@ -43,6 +45,8 @@ func (a *ApiServer) SubmitJob(w http.ResponseWriter, r *http.Request){
 			Status: job.Pending,
 			RetryCount: 0,
 			MaxRetries: 3,
+			Model: b.Model,
+			Prompt: b.Prompt,
 		}
 		store.Create(testjob,a.apistore)
 		a.apidatabase.SaveJob(testjob)
